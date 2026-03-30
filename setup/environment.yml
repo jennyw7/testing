@@ -1,0 +1,19 @@
+name: my_env
+channels:
+  - defaults
+  - conda-forge
+
+dependencies:
+  - python=3.11
+  - numpy
+  - pandas
+  - scipy
+  - matplotlib
+  - pip
+  - sqlalchemy
+  - ipykernel
+  - jupytext
+  - psycopg2
+  - pip:
+      - snowflake-sqlalchemy
+      - snowflake-snowpark-python
