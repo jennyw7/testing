@@ -1,0 +1,19 @@
+SELECT  campaigns.id as campaign_id,
+        campaigns.name as campaign_name,
+        campaigns.start_date,
+        campaigns.end_date,
+        campaigns.status_cd,
+        users.id as user_id,
+        users.company_name as agency_name,
+        users.account_name as account_name,
+        users.timezone,
+        users.team_admin_email as email,
+        campaigns.sub_advertiser_id,
+        sub_advertisers.name as sub_advertiser_name
+FROM    campaigns
+        LEFT JOIN users
+            ON campaigns.user_id = users.id
+        LEFT JOIN sub_advertisers
+            ON campaigns.sub_advertiser_id = sub_advertisers.id
+WHERE   campaigns.sub_advertiser_id IN ({sub_advertiser_id_string})
+        and users.team_admin_email = 'jallen@teampurpose.com'

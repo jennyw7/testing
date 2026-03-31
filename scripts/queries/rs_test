@@ -1,0 +1,13 @@
+select  advertiser_id,
+        campaign_id,
+        sum(has_won) as impressions,
+        sum(has_click) as clicks,
+        sum(has_conv) as conversions,
+        sum(has_engagement) as engagements,
+        sum(cost)/1000000.0 as media_spend
+from    sa_rs_evt_table_2025_01_01
+where   sub_advertiser_id in (46398, 47692)
+        and supply_inventory_type in ('display')
+        and campaign_id in (439073)
+group by advertiser_id, campaign_id
+;
