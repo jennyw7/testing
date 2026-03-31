@@ -10,10 +10,14 @@ dependencies:
   - scipy
   - matplotlib
   - pip
-  - sqlalchemy
+  - sqlalchemy=2.0.48
   - ipykernel
   - jupytext
-  - psycopg2
+  - psycopg2=2.9.11
+  - pymysql
   - pip:
       - snowflake-sqlalchemy
       - snowflake-snowpark-python
+      - sqlalchemy-redshift
+      - redshift-connector
+      - psycopg2-binary==2.9.11

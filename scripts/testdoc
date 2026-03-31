@@ -1,0 +1,39 @@
+
+
+SELECT  DISTINCT
+        campaigns.id AS Campaign_ID,
+        campaigns.goal,
+        users.id as user_id,
+        users.team_admin_email AS Email,
+        users.company_name AS Agency_Name,
+        users.account_name AS account_name,
+        users.timezone as Time_zone,
+        sub_advertisers.name AS sub_Advertiser_Name,
+        campaigns.sub_advertiser_id AS sub_Advertiser_Id,
+        line_items.name AS IO_Name,
+        line_items.id AS IO_ID,
+        campaigns.name AS Campaign_Name,
+        campaigns.type as camp_type,
+        campaigns.state AS Campaign_Status,
+        campaigns.start_date AS Campaign_Start_Date,
+        campaigns.end_date AS Campaign_End_Date,
+        campaigns.pg_deal_id_options AS pg_deal_id_options,
+        brand_lift_studies.id AS BLS_id
+
+FROM    campaigns
+        LEFT JOIN users
+            ON campaigns.user_id = users.id
+        LEFT JOIN line_items
+            ON campaigns.line_item_id=line_items.id
+        LEFT JOIN sub_advertisers
+            ON campaigns.sub_advertiser_id = sub_advertisers.id
+        LEFT JOIN brand_lift_studies
+            ON campaigns.name = brand_lift_studies.name
+
+WHERE   campaigns.sub_advertiser_id in (46398, 47692)
+        and users.team_admin_email = 'jallen@teampurpose.com'
+;
+
+
+
+
