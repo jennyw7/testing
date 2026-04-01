@@ -2509,22 +2509,15 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 </div>
-<div id="0da87a5d" class="cell" data-execution_count="8">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>user_id <span class="op">=</span> mysql_df[<span class="st">&#39;user_id&#39;</span>][<span class="dv">0</span>].item()</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>user_id</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
-<pre><code>23058</code></pre>
-</div>
-</div>
 </section>
 <section id="list-all-active-campaigns-in-the-last-two-months-broken-out-by-channel." class="level4">
 <h4 class="anchored" data-anchor-id="list-all-active-campaigns-in-the-last-two-months-broken-out-by-channel.">1. List all active campaigns in the last two months broken out by channel.</h4>
 <div id="1b4dceab" class="cell" data-execution_count="33">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>active_campaigns <span class="op">=</span> mysql_df[</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    (pd.to_datetime(mysql_df[<span class="st">&#39;end_date&#39;</span>]) <span class="op">&gt;=</span> datetime.now() <span class="op">-</span> pd.DateOffset(months<span class="op">=</span><span class="dv">2</span>))</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>][[<span class="st">&#39;campaign_id&#39;</span>, <span class="st">&#39;campaign_name&#39;</span>, <span class="st">&#39;channel_type&#39;</span>, <span class="st">&#39;channel_subtype&#39;</span>, <span class="st">&#39;start_date&#39;</span>, <span class="st">&#39;end_date&#39;</span>]].sort_values(<span class="st">&#39;channel_type&#39;</span>) </span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>active_campaigns</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>active_campaigns <span class="op">=</span> mysql_df[</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    (pd.to_datetime(mysql_df[<span class="st">&#39;end_date&#39;</span>]) <span class="op">&gt;=</span> datetime.now() <span class="op">-</span> pd.DateOffset(months<span class="op">=</span><span class="dv">2</span>))</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>][[<span class="st">&#39;campaign_id&#39;</span>, <span class="st">&#39;campaign_name&#39;</span>, <span class="st">&#39;channel_type&#39;</span>, <span class="st">&#39;channel_subtype&#39;</span>, <span class="st">&#39;start_date&#39;</span>, <span class="st">&#39;end_date&#39;</span>]].sort_values(<span class="st">&#39;channel_type&#39;</span>) </span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>active_campaigns</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="33">
 <div>
 
@@ -2649,17 +2642,17 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 <div id="83257c69" class="cell" data-execution_count="34">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>channel_detail <span class="op">=</span> (</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    active_campaigns</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>    .groupby([<span class="st">&quot;channel_type&quot;</span>], dropna<span class="op">=</span><span class="va">False</span>)</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    .agg(</span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>        active_campaign_count<span class="op">=</span>(<span class="st">&quot;campaign_id&quot;</span>, <span class="st">&quot;nunique&quot;</span>),</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    .sort_values([<span class="st">&quot;active_campaign_count&quot;</span>, <span class="st">&quot;channel_type&quot;</span>], ascending<span class="op">=</span>[<span class="va">False</span>, <span class="va">True</span>])</span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>channel_detail</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>channel_detail <span class="op">=</span> (</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    active_campaigns</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    .groupby([<span class="st">&quot;channel_type&quot;</span>], dropna<span class="op">=</span><span class="va">False</span>)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    .agg(</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        active_campaign_count<span class="op">=</span>(<span class="st">&quot;campaign_id&quot;</span>, <span class="st">&quot;nunique&quot;</span>),</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    .reset_index()</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>    .sort_values([<span class="st">&quot;active_campaign_count&quot;</span>, <span class="st">&quot;channel_type&quot;</span>], ascending<span class="op">=</span>[<span class="va">False</span>, <span class="va">True</span>])</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>channel_detail</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="34">
 <div>
 
@@ -2703,7 +2696,7 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <section id="provide-a-list-of-conversion-trackers-with-their-id-name-tracker-type-conversion-category-and-unique-key-under-sub_advertiser-id-46398-47692." class="level4">
 <h4 class="anchored" data-anchor-id="provide-a-list-of-conversion-trackers-with-their-id-name-tracker-type-conversion-category-and-unique-key-under-sub_advertiser-id-46398-47692.">2. Provide a list of conversion trackers with their ID, name, tracker type, conversion category, and unique key under (Sub_Advertiser ID) 46398 &amp; 47692.</h4>
 <div id="e1e6a645" class="cell" data-execution_count="35">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>mysql_df[[<span class="st">&#39;user_id&#39;</span>, <span class="st">&#39;sub_advertiser_id&#39;</span>, <span class="st">&#39;campaign_id&#39;</span>, <span class="st">&#39;conversion_tracker_id&#39;</span>, <span class="st">&#39;tracker_type&#39;</span>]].drop_duplicates()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>mysql_df[[<span class="st">&#39;user_id&#39;</span>, <span class="st">&#39;sub_advertiser_id&#39;</span>, <span class="st">&#39;campaign_id&#39;</span>, <span class="st">&#39;conversion_tracker_id&#39;</span>, <span class="st">&#39;tracker_type&#39;</span>]].drop_duplicates()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="35">
 <div>
 
@@ -2815,27 +2808,6 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 </div>
 </div>
 </div>
-<section id="redshift-data" class="level5">
-<h5 class="anchored" data-anchor-id="redshift-data">Redshift Data</h5>
-<div id="6afce554" class="cell" data-execution_count="21">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co">#get the user_id</span></span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>user_id <span class="op">=</span> mysql_df[<span class="st">&#39;user_id&#39;</span>].unique()[<span class="dv">0</span>].item()</span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>user_id</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
-<pre><code>23058</code></pre>
-</div>
-</div>
-<div id="6af3b783" class="cell" data-execution_count="48">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert times from utc to eastern</span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>[start_date_utc, end_date_utc] <span class="op">=</span> utc_translation(<span class="st">&#39;2024-12-01 00:00:00&#39;</span>, </span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;2024-12-31 00:00:00&#39;</span>, </span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;US/Eastern&#39;</span>)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>end_date_utc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="48">
-<pre><code>&#39;2024-12-31 05:00:00&#39;</code></pre>
-</div>
-</div>
-</section>
 </section>
 <section id="provide-the-following-kpis-for-all-display-campaigns-in-december-2024" class="level4">
 <h4 class="anchored" data-anchor-id="provide-the-following-kpis-for-all-display-campaigns-in-december-2024">3. Provide the following KPIs for all display campaigns in December 2024:</h4>
@@ -2849,36 +2821,56 @@ var requirejs,require,define;(function(global,setTimeout){var req,s,head,baseEle
 <li>Engagements</li>
 <li>Engagement Rate</li>
 </ul>
+<section id="redshift-data" class="level5">
+<h5 class="anchored" data-anchor-id="redshift-data">Redshift Data</h5>
+<div id="6afce554" class="cell" data-execution_count="21">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#get the user_id</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>user_id <span class="op">=</span> mysql_df[<span class="st">&#39;user_id&#39;</span>].unique()[<span class="dv">0</span>].item()</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>user_id</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>23058</code></pre>
+</div>
+</div>
+<div id="6af3b783" class="cell" data-execution_count="48">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert times from utc to eastern</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>[start_date_utc, end_date_utc] <span class="op">=</span> utc_translation(<span class="st">&#39;2024-12-01 00:00:00&#39;</span>, </span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;2024-12-31 00:00:00&#39;</span>, </span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;US/Eastern&#39;</span>)</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>end_date_utc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="48">
+<pre><code>&#39;2024-12-31 05:00:00&#39;</code></pre>
+</div>
+</div>
 <div id="bc3f5b51" class="cell" data-execution_count="52">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># redshift query pull</span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>select_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select  advertiser_id,</span></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="st">            campaign_id,</span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_won) as impressions,</span></span>
-<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_click) as clicks,</span></span>
-<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_conv) as conversions,</span></span>
-<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_engagement) as engagements,</span></span>
-<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost)/1000000.0 as media_spend</span></span>
-<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span> </span>
-<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>where_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a><span class="st">    where   sub_advertiser_id in (46398, 47692)</span></span>
-<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a><span class="st">            and supply_inventory_type in (&#39;display&#39;)</span></span>
-<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a>groupby_stmt <span class="op">=</span> <span class="st">&quot;group by advertiser_id, campaign_id&quot;</span></span>
-<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>orderby_stmt <span class="op">=</span> <span class="st">&quot;order by campaign_id&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># redshift query pull</span></span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>select_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select  advertiser_id,</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="st">            campaign_id,</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_won) as impressions,</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_click) as clicks,</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_conv) as conversions,</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_engagement) as engagements,</span></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost)/1000000.0 as media_spend</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span> </span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a>where_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="st">    where   sub_advertiser_id in (46398, 47692)</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a><span class="st">            and supply_inventory_type in (&#39;display&#39;)</span></span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>groupby_stmt <span class="op">=</span> <span class="st">&quot;group by advertiser_id, campaign_id&quot;</span></span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>orderby_stmt <span class="op">=</span> <span class="st">&quot;order by campaign_id&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="b78abb5f" class="cell" data-execution_count="53">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rs_df <span class="op">=</span> daily_looper_fun(dur <span class="op">=</span> <span class="dv">30</span>,</span>
-<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>                        enddate <span class="op">=</span> <span class="st">&#39;2024-12-31 05:00:00&#39;</span>,</span>
-<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>                        SELECT <span class="op">=</span> select_stmt,</span>
-<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>                        WHERE_daily <span class="op">=</span> where_stmt,</span>
-<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>                        GROUPBY <span class="op">=</span> groupby_stmt,</span>
-<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>                        ORDERBY <span class="op">=</span> orderby_stmt,</span>
-<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>                        user_id <span class="op">=</span> user_id)</span>
-<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>rs_df.head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>rs_df <span class="op">=</span> daily_looper_fun(dur <span class="op">=</span> <span class="dv">30</span>,</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>                        enddate <span class="op">=</span> <span class="st">&#39;2024-12-31 05:00:00&#39;</span>,</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>                        SELECT <span class="op">=</span> select_stmt,</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>                        WHERE_daily <span class="op">=</span> where_stmt,</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>                        GROUPBY <span class="op">=</span> groupby_stmt,</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>                        ORDERBY <span class="op">=</span> orderby_stmt,</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>                        user_id <span class="op">=</span> user_id)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>rs_df.head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mod Value : 2
 Daily Cluster: 2
@@ -3042,13 +3034,13 @@ sa_rs_evt_table_2024_12_02</code></pre>
 </div>
 </div>
 <div id="9cce5264" class="cell" data-execution_count="54">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>rs_df[<span class="st">&#39;click_through_rate&#39;</span>] <span class="op">=</span> rs_df[<span class="st">&#39;clicks&#39;</span>] <span class="op">/</span> rs_df[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>rs_df[<span class="st">&#39;conversion_rate&#39;</span>] <span class="op">=</span> rs_df[<span class="st">&#39;conversions&#39;</span>] <span class="op">/</span> rs_df[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>rs_df[<span class="st">&#39;engagement_rate&#39;</span>] <span class="op">=</span> rs_df[<span class="st">&#39;engagements&#39;</span>] <span class="op">/</span> rs_df[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>rs_df[<span class="st">&#39;cost_per_click&#39;</span>] <span class="op">=</span> rs_df[<span class="st">&#39;media_spend&#39;</span>] <span class="op">/</span> rs_df[<span class="st">&#39;clicks&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>rs_df[<span class="st">&#39;click_through_rate&#39;</span>] <span class="op">=</span> rs_df[<span class="st">&#39;clicks&#39;</span>] <span class="op">/</span> rs_df[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>rs_df[<span class="st">&#39;conversion_rate&#39;</span>] <span class="op">=</span> rs_df[<span class="st">&#39;conversions&#39;</span>] <span class="op">/</span> rs_df[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>rs_df[<span class="st">&#39;engagement_rate&#39;</span>] <span class="op">=</span> rs_df[<span class="st">&#39;engagements&#39;</span>] <span class="op">/</span> rs_df[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>rs_df[<span class="st">&#39;cost_per_click&#39;</span>] <span class="op">=</span> rs_df[<span class="st">&#39;media_spend&#39;</span>] <span class="op">/</span> rs_df[<span class="st">&#39;clicks&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="8e16f3de" class="cell" data-execution_count="55">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>rs_df[[<span class="st">&#39;advertiser_id&#39;</span>, <span class="st">&#39;campaign_id&#39;</span>, <span class="st">&#39;impressions&#39;</span>, <span class="st">&#39;clicks&#39;</span>, <span class="st">&#39;conversions&#39;</span>, <span class="st">&#39;media_spend&#39;</span>, <span class="st">&#39;click_through_rate&#39;</span>, <span class="st">&#39;conversion_rate&#39;</span>, <span class="st">&#39;engagements&#39;</span>, <span class="st">&#39;engagement_rate&#39;</span>, <span class="st">&#39;cost_per_click&#39;</span>]].head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>rs_df[[<span class="st">&#39;advertiser_id&#39;</span>, <span class="st">&#39;campaign_id&#39;</span>, <span class="st">&#39;impressions&#39;</span>, <span class="st">&#39;clicks&#39;</span>, <span class="st">&#39;conversions&#39;</span>, <span class="st">&#39;media_spend&#39;</span>, <span class="st">&#39;click_through_rate&#39;</span>, <span class="st">&#39;conversion_rate&#39;</span>, <span class="st">&#39;engagements&#39;</span>, <span class="st">&#39;engagement_rate&#39;</span>, <span class="st">&#39;cost_per_click&#39;</span>]].head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="55">
 <div>
 
@@ -3218,49 +3210,50 @@ sa_rs_evt_table_2024_12_02</code></pre>
 </div>
 </div>
 </section>
+</section>
 <section id="provide-kpis-for-the-ctv-video-campaigns-active-on-feb-1-2025." class="level4">
 <h4 class="anchored" data-anchor-id="provide-kpis-for-the-ctv-video-campaigns-active-on-feb-1-2025.">4. Provide KPIs for the CTV &amp; Video campaigns active on Feb 1, 2025.</h4>
 <div id="b9137ab5" class="cell" data-execution_count="62">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="co"># redshift query pull</span></span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>select_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select  advertiser_id,</span></span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="st">            campaign_id,</span></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_won) as impressions,</span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_click) as clicks,</span></span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_conv) as conversions,</span></span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_engagement) as engagements,</span></span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost)/1000000.0 as media_spend,</span></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost_usd)/1000000.0 as media_spend_usd</span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span> </span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>where_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a><span class="st">    where   sub_advertiser_id in (46398, 47692)</span></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="st">            and supply_inventory_type in (&#39;image&#39;, &#39;video&#39;)</span></span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a>groupby_stmt <span class="op">=</span> <span class="st">&quot;group by advertiser_id, campaign_id&quot;</span></span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a>orderby_stmt <span class="op">=</span> <span class="st">&quot;order by campaign_id&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="co"># redshift query pull</span></span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>select_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select  advertiser_id,</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="st">            campaign_id,</span></span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_won) as impressions,</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_click) as clicks,</span></span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_conv) as conversions,</span></span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_engagement) as engagements,</span></span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost)/1000000.0 as media_spend,</span></span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost_usd)/1000000.0 as media_spend_usd</span></span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span> </span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>where_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a><span class="st">    where   sub_advertiser_id in (46398, 47692)</span></span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a><span class="st">            and supply_inventory_type in (&#39;image&#39;, &#39;video&#39;)</span></span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>groupby_stmt <span class="op">=</span> <span class="st">&quot;group by advertiser_id, campaign_id&quot;</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>orderby_stmt <span class="op">=</span> <span class="st">&quot;order by campaign_id&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="5ea9fc27" class="cell" data-execution_count="63">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert times from utc to eastern</span></span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>[start_date_utc, end_date_utc] <span class="op">=</span> utc_translation(<span class="st">&#39;2025-02-01 00:00:00&#39;</span>, </span>
-<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;2025-02-01 00:00:00&#39;</span>, </span>
-<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;US/Eastern&#39;</span>)</span>
-<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>end_date_utc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># convert times from utc to eastern</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>[start_date_utc, end_date_utc] <span class="op">=</span> utc_translation(<span class="st">&#39;2025-02-01 00:00:00&#39;</span>, </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;2025-02-01 00:00:00&#39;</span>, </span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a>                                                 <span class="st">&#39;US/Eastern&#39;</span>)</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a>end_date_utc</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="63">
 <pre><code>&#39;2025-02-01 05:00:00&#39;</code></pre>
 </div>
 </div>
 <div id="eb423562" class="cell" data-execution_count="64">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rs_df2 <span class="op">=</span> daily_looper_fun(dur <span class="op">=</span> <span class="dv">1</span>,</span>
-<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>                        enddate <span class="op">=</span> <span class="st">&#39;2025-02-01 05:00:00&#39;</span>,</span>
-<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>                        SELECT <span class="op">=</span> select_stmt,</span>
-<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>                        WHERE_daily <span class="op">=</span> where_stmt,</span>
-<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>                        GROUPBY <span class="op">=</span> groupby_stmt,</span>
-<span id="cb27-6"><a href="#cb27-6" aria-hidden="true" tabindex="-1"></a>                        ORDERBY <span class="op">=</span> orderby_stmt,</span>
-<span id="cb27-7"><a href="#cb27-7" aria-hidden="true" tabindex="-1"></a>                        user_id <span class="op">=</span> user_id)</span>
-<span id="cb27-8"><a href="#cb27-8" aria-hidden="true" tabindex="-1"></a>rs_df2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>rs_df2 <span class="op">=</span> daily_looper_fun(dur <span class="op">=</span> <span class="dv">1</span>,</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>                        enddate <span class="op">=</span> <span class="st">&#39;2025-02-01 05:00:00&#39;</span>,</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>                        SELECT <span class="op">=</span> select_stmt,</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>                        WHERE_daily <span class="op">=</span> where_stmt,</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>                        GROUPBY <span class="op">=</span> groupby_stmt,</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>                        ORDERBY <span class="op">=</span> orderby_stmt,</span>
+<span id="cb25-7"><a href="#cb25-7" aria-hidden="true" tabindex="-1"></a>                        user_id <span class="op">=</span> user_id)</span>
+<span id="cb25-8"><a href="#cb25-8" aria-hidden="true" tabindex="-1"></a>rs_df2</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mod Value : 2
 Daily Cluster: 2
@@ -3418,13 +3411,13 @@ sa_rs_evt_table_2025_02_01</code></pre>
 </div>
 </div>
 <div id="7308cc73" class="cell" data-execution_count="65">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>rs_df2[<span class="st">&#39;click_through_rate&#39;</span>] <span class="op">=</span> rs_df2[<span class="st">&#39;clicks&#39;</span>] <span class="op">/</span> rs_df2[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
-<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>rs_df2[<span class="st">&#39;conversion_rate&#39;</span>] <span class="op">=</span> rs_df2[<span class="st">&#39;conversions&#39;</span>] <span class="op">/</span> rs_df2[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
-<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>rs_df2[<span class="st">&#39;engagement_rate&#39;</span>] <span class="op">=</span> rs_df2[<span class="st">&#39;engagements&#39;</span>] <span class="op">/</span> rs_df2[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
-<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a>rs_df2[<span class="st">&#39;cost_per_click&#39;</span>] <span class="op">=</span> rs_df2[<span class="st">&#39;media_spend&#39;</span>] <span class="op">/</span> rs_df2[<span class="st">&#39;clicks&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>rs_df2[<span class="st">&#39;click_through_rate&#39;</span>] <span class="op">=</span> rs_df2[<span class="st">&#39;clicks&#39;</span>] <span class="op">/</span> rs_df2[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>rs_df2[<span class="st">&#39;conversion_rate&#39;</span>] <span class="op">=</span> rs_df2[<span class="st">&#39;conversions&#39;</span>] <span class="op">/</span> rs_df2[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a>rs_df2[<span class="st">&#39;engagement_rate&#39;</span>] <span class="op">=</span> rs_df2[<span class="st">&#39;engagements&#39;</span>] <span class="op">/</span> rs_df2[<span class="st">&#39;impressions&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a>rs_df2[<span class="st">&#39;cost_per_click&#39;</span>] <span class="op">=</span> rs_df2[<span class="st">&#39;media_spend&#39;</span>] <span class="op">/</span> rs_df2[<span class="st">&#39;clicks&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 <div id="6cafecb7" class="cell" data-execution_count="61">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rs_df2[[<span class="st">&#39;advertiser_id&#39;</span>, <span class="st">&#39;campaign_id&#39;</span>, <span class="st">&#39;impressions&#39;</span>, <span class="st">&#39;clicks&#39;</span>, <span class="st">&#39;conversions&#39;</span>, <span class="st">&#39;media_spend&#39;</span>, <span class="st">&#39;click_through_rate&#39;</span>, <span class="st">&#39;conversion_rate&#39;</span>, <span class="st">&#39;engagements&#39;</span>, <span class="st">&#39;engagement_rate&#39;</span>, <span class="st">&#39;cost_per_click&#39;</span>]].head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>rs_df2[[<span class="st">&#39;advertiser_id&#39;</span>, <span class="st">&#39;campaign_id&#39;</span>, <span class="st">&#39;impressions&#39;</span>, <span class="st">&#39;clicks&#39;</span>, <span class="st">&#39;conversions&#39;</span>, <span class="st">&#39;media_spend&#39;</span>, <span class="st">&#39;click_through_rate&#39;</span>, <span class="st">&#39;conversion_rate&#39;</span>, <span class="st">&#39;engagements&#39;</span>, <span class="st">&#39;engagement_rate&#39;</span>, <span class="st">&#39;cost_per_click&#39;</span>]].head(<span class="dv">10</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-display" data-execution_count="61">
 <div>
 
@@ -3596,44 +3589,48 @@ sa_rs_evt_table_2025_02_01</code></pre>
 </section>
 <section id="please-provide-a-breakdown-of-cost-kpis-cost-media-cost-in-usd-cpm-cpc-by-region-and-city-for-one-campaign-in-the-last-5-days." class="level4">
 <h4 class="anchored" data-anchor-id="please-provide-a-breakdown-of-cost-kpis-cost-media-cost-in-usd-cpm-cpc-by-region-and-city-for-one-campaign-in-the-last-5-days.">5. Please provide a breakdown of Cost KPIs (cost, media cost in USD, CPM, CPC) by region and city for one campaign in the last 5 days.</h4>
-<div id="def24ebf" class="cell" data-execution_count="77">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># redshift query pull</span></span>
-<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>select_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select  region,</span></span>
-<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a><span class="st">            city,</span></span>
-<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_won) as impressions,</span></span>
-<span id="cb31-6"><a href="#cb31-6" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_click) as clicks,</span></span>
-<span id="cb31-7"><a href="#cb31-7" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost)/1000000.0 as media_spend,</span></span>
-<span id="cb31-8"><a href="#cb31-8" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost_usd)/1000000.0 as media_spend_usd</span></span>
-<span id="cb31-9"><a href="#cb31-9" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span> </span>
-<span id="cb31-10"><a href="#cb31-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-11"><a href="#cb31-11" aria-hidden="true" tabindex="-1"></a>where_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb31-12"><a href="#cb31-12" aria-hidden="true" tabindex="-1"></a><span class="st">    where   campaign_id in (2733954)</span></span>
-<span id="cb31-13"><a href="#cb31-13" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
-<span id="cb31-14"><a href="#cb31-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-15"><a href="#cb31-15" aria-hidden="true" tabindex="-1"></a>groupby_stmt <span class="op">=</span> <span class="st">&quot;group by region, city&quot;</span></span>
-<span id="cb31-16"><a href="#cb31-16" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb31-17"><a href="#cb31-17" aria-hidden="true" tabindex="-1"></a>orderby_stmt <span class="op">=</span> <span class="st">&quot;order by region, city&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="def24ebf" class="cell" data-execution_count="81">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># redshift query pull</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>select_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a><span class="st">    select  region,</span></span>
+<span id="cb29-4"><a href="#cb29-4" aria-hidden="true" tabindex="-1"></a><span class="st">            city,</span></span>
+<span id="cb29-5"><a href="#cb29-5" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_won) as impressions,</span></span>
+<span id="cb29-6"><a href="#cb29-6" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(has_click) as clicks,</span></span>
+<span id="cb29-7"><a href="#cb29-7" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost)/1000000.0 as media_spend,</span></span>
+<span id="cb29-8"><a href="#cb29-8" aria-hidden="true" tabindex="-1"></a><span class="st">            sum(cost_usd)/1000000.0 as media_spend_usd</span></span>
+<span id="cb29-9"><a href="#cb29-9" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span> </span>
+<span id="cb29-10"><a href="#cb29-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="#cb29-11" aria-hidden="true" tabindex="-1"></a>where_stmt <span class="op">=</span> <span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb29-12"><a href="#cb29-12" aria-hidden="true" tabindex="-1"></a><span class="st">    where   campaign_id in (2733954)</span></span>
+<span id="cb29-13"><a href="#cb29-13" aria-hidden="true" tabindex="-1"></a><span class="st">&quot;&quot;&quot;</span></span>
+<span id="cb29-14"><a href="#cb29-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a>groupby_stmt <span class="op">=</span> <span class="st">&quot;group by region, city&quot;</span></span>
+<span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb29-17"><a href="#cb29-17" aria-hidden="true" tabindex="-1"></a>orderby_stmt <span class="op">=</span> <span class="st">&quot;order by region, city&quot;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div id="68e502a5" class="cell" data-execution_count="78">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>rs_df3 <span class="op">=</span> daily_looper_fun(dur <span class="op">=</span> <span class="dv">1</span>,</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>                        enddate <span class="op">=</span> <span class="st">&#39;2026-03-30 05:00:00&#39;</span>,</span>
-<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>                        SELECT <span class="op">=</span> select_stmt,</span>
-<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>                        WHERE_daily <span class="op">=</span> where_stmt,</span>
-<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>                        GROUPBY <span class="op">=</span> groupby_stmt,</span>
-<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>                        ORDERBY <span class="op">=</span> orderby_stmt,</span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>                        user_id <span class="op">=</span> user_id)</span>
-<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>rs_df3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="68e502a5" class="cell" data-execution_count="82">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>rs_df3 <span class="op">=</span> daily_looper_fun(dur <span class="op">=</span> <span class="dv">5</span>,</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>                        enddate <span class="op">=</span> <span class="st">&#39;2026-03-31 05:00:00&#39;</span>,</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>                        SELECT <span class="op">=</span> select_stmt,</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>                        WHERE_daily <span class="op">=</span> where_stmt,</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>                        GROUPBY <span class="op">=</span> groupby_stmt,</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>                        ORDERBY <span class="op">=</span> orderby_stmt,</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>                        user_id <span class="op">=</span> user_id)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>rs_df3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mod Value : 2
 Daily Cluster: 2
 Mod Value : 2
 Daily Cluster: 2
 Pulling daily tables from daily DB
+sa_rs_evt_table_2026_04_01
 sa_rs_evt_table_2026_03_31
-sa_rs_evt_table_2026_03_30</code></pre>
+sa_rs_evt_table_2026_03_30
+sa_rs_evt_table_2026_03_29
+sa_rs_evt_table_2026_03_28
+sa_rs_evt_table_2026_03_27</code></pre>
 </div>
-<div class="cell-output cell-output-display" data-execution_count="78">
+<div class="cell-output cell-output-display" data-execution_count="82">
 <div>
 
 
@@ -3654,40 +3651,76 @@ sa_rs_evt_table_2026_03_30</code></pre>
 <th data-quarto-table-cell-role="th">0</th>
 <td>ab</td>
 <td>calgary</td>
-<td>38163</td>
-<td>30</td>
-<td>64.162748</td>
-<td>64.162748</td>
+<td>2382</td>
+<td>3</td>
+<td>5.805513</td>
+<td>5.805513</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>bc</td>
 <td>vancouver</td>
-<td>17930</td>
-<td>16</td>
-<td>36.112480</td>
-<td>36.112480</td>
+<td>1232</td>
+<td>0</td>
+<td>3.234643</td>
+<td>3.234643</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>on</td>
 <td>mississauga</td>
-<td>27104</td>
-<td>19</td>
-<td>57.984362</td>
-<td>57.984362</td>
+<td>1122</td>
+<td>0</td>
+<td>2.733594</td>
+<td>2.733594</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>on</td>
 <td>ottawa</td>
-<td>22755</td>
-<td>20</td>
-<td>52.076566</td>
-<td>52.076566</td>
+<td>665</td>
+<td>1</td>
+<td>1.748805</td>
+<td>1.748805</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">4</th>
+<td>ab</td>
+<td>calgary</td>
+<td>61436</td>
+<td>49</td>
+<td>92.531548</td>
+<td>92.531548</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">5</th>
+<td>bc</td>
+<td>vancouver</td>
+<td>27793</td>
+<td>26</td>
+<td>47.918756</td>
+<td>47.918756</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">6</th>
+<td>on</td>
+<td>mississauga</td>
+<td>39330</td>
+<td>31</td>
+<td>72.734607</td>
+<td>72.734607</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">7</th>
+<td>on</td>
+<td>ottawa</td>
+<td>32430</td>
+<td>28</td>
+<td>63.772151</td>
+<td>63.772151</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">8</th>
 <td>ab</td>
 <td>calgary</td>
 <td>85355</td>
@@ -3696,7 +3729,7 @@ sa_rs_evt_table_2026_03_30</code></pre>
 <td>111.867019</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
+<th data-quarto-table-cell-role="th">9</th>
 <td>bc</td>
 <td>vancouver</td>
 <td>33618</td>
@@ -3705,7 +3738,7 @@ sa_rs_evt_table_2026_03_30</code></pre>
 <td>45.042891</td>
 </tr>
 <tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
+<th data-quarto-table-cell-role="th">10</th>
 <td>on</td>
 <td>mississauga</td>
 <td>40817</td>
@@ -3714,7 +3747,7 @@ sa_rs_evt_table_2026_03_30</code></pre>
 <td>56.275055</td>
 </tr>
 <tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
+<th data-quarto-table-cell-role="th">11</th>
 <td>on</td>
 <td>ottawa</td>
 <td>30889</td>
@@ -3722,18 +3755,192 @@ sa_rs_evt_table_2026_03_30</code></pre>
 <td>42.298061</td>
 <td>42.298061</td>
 </tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">12</th>
+<td>ab</td>
+<td>calgary</td>
+<td>88115</td>
+<td>64</td>
+<td>115.137376</td>
+<td>115.137376</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">13</th>
+<td>bc</td>
+<td>vancouver</td>
+<td>28752</td>
+<td>6</td>
+<td>38.687654</td>
+<td>38.687654</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">14</th>
+<td>on</td>
+<td>mississauga</td>
+<td>41010</td>
+<td>48</td>
+<td>54.729047</td>
+<td>54.729047</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">15</th>
+<td>on</td>
+<td>ottawa</td>
+<td>28459</td>
+<td>28</td>
+<td>37.300274</td>
+<td>37.300274</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">16</th>
+<td>ab</td>
+<td>calgary</td>
+<td>73477</td>
+<td>54</td>
+<td>99.117427</td>
+<td>99.117427</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">17</th>
+<td>bc</td>
+<td>vancouver</td>
+<td>23864</td>
+<td>10</td>
+<td>32.285229</td>
+<td>32.285229</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">18</th>
+<td>on</td>
+<td>mississauga</td>
+<td>36008</td>
+<td>32</td>
+<td>49.206123</td>
+<td>49.206123</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">19</th>
+<td>on</td>
+<td>ottawa</td>
+<td>23135</td>
+<td>15</td>
+<td>31.422268</td>
+<td>31.422268</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">20</th>
+<td>ab</td>
+<td>calgary</td>
+<td>112128</td>
+<td>86</td>
+<td>110.161940</td>
+<td>110.161940</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">21</th>
+<td>bc</td>
+<td>vancouver</td>
+<td>45767</td>
+<td>26</td>
+<td>44.415646</td>
+<td>44.415646</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">22</th>
+<td>on</td>
+<td>mississauga</td>
+<td>57234</td>
+<td>37</td>
+<td>58.321626</td>
+<td>58.321626</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">23</th>
+<td>on</td>
+<td>ottawa</td>
+<td>39208</td>
+<td>39</td>
+<td>40.700674</td>
+<td>40.700674</td>
+</tr>
 </tbody>
 </table>
 
 </div>
 </div>
 </div>
-<div id="0f6f66f2" class="cell" data-execution_count="79">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>rs_df3[<span class="st">&#39;cost_per_click&#39;</span>] <span class="op">=</span> rs_df3[<span class="st">&#39;media_spend&#39;</span>] <span class="op">/</span> rs_df3[<span class="st">&#39;clicks&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div id="797ea524" class="cell" data-execution_count="86">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>rs_df3_summary <span class="op">=</span> (</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    rs_df3</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    .groupby([<span class="st">&quot;region&quot;</span>, <span class="st">&quot;city&quot;</span>], dropna<span class="op">=</span><span class="va">False</span>, as_index<span class="op">=</span><span class="va">False</span>)[</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>        [<span class="st">&quot;impressions&quot;</span>, <span class="st">&quot;clicks&quot;</span>, <span class="st">&quot;media_spend&quot;</span>, <span class="st">&quot;media_spend_usd&quot;</span>]</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    ].<span class="bu">sum</span>()</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>rs_df3_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="86">
+<div>
+
+
+<table class="dataframe caption-top table table-sm table-striped small" data-border="1">
+<thead>
+<tr class="header">
+<th data-quarto-table-cell-role="th"></th>
+<th data-quarto-table-cell-role="th">region</th>
+<th data-quarto-table-cell-role="th">city</th>
+<th data-quarto-table-cell-role="th">impressions</th>
+<th data-quarto-table-cell-role="th">clicks</th>
+<th data-quarto-table-cell-role="th">media_spend</th>
+<th data-quarto-table-cell-role="th">media_spend_usd</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">0</th>
+<td>ab</td>
+<td>calgary</td>
+<td>422893</td>
+<td>320</td>
+<td>534.620823</td>
+<td>534.620823</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">1</th>
+<td>bc</td>
+<td>vancouver</td>
+<td>161026</td>
+<td>91</td>
+<td>211.584819</td>
+<td>211.584819</td>
+</tr>
+<tr class="odd">
+<th data-quarto-table-cell-role="th">2</th>
+<td>on</td>
+<td>mississauga</td>
+<td>215521</td>
+<td>183</td>
+<td>294.000052</td>
+<td>294.000052</td>
+</tr>
+<tr class="even">
+<th data-quarto-table-cell-role="th">3</th>
+<td>on</td>
+<td>ottawa</td>
+<td>154786</td>
+<td>132</td>
+<td>217.242233</td>
+<td>217.242233</td>
+</tr>
+</tbody>
+</table>
+
 </div>
-<div id="53938a06" class="cell" data-execution_count="80">
-<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>rs_df3</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-<div class="cell-output cell-output-display" data-execution_count="80">
+</div>
+</div>
+<div id="0f6f66f2" class="cell" data-execution_count="87">
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>rs_df3_summary[<span class="st">&#39;cost_per_click&#39;</span>] <span class="op">=</span> rs_df3_summary[<span class="st">&#39;media_spend&#39;</span>] <span class="op">/</span> rs_df3_summary[<span class="st">&#39;clicks&#39;</span>].replace(<span class="dv">0</span>, np.nan)</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>rs_df3_summary</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="cell-output cell-output-display" data-execution_count="87">
 <div>
 
 
@@ -3755,81 +3962,41 @@ sa_rs_evt_table_2026_03_30</code></pre>
 <th data-quarto-table-cell-role="th">0</th>
 <td>ab</td>
 <td>calgary</td>
-<td>38163</td>
-<td>30</td>
-<td>64.162748</td>
-<td>64.162748</td>
-<td>2.138758</td>
+<td>422893</td>
+<td>320</td>
+<td>534.620823</td>
+<td>534.620823</td>
+<td>1.670690</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">1</th>
 <td>bc</td>
 <td>vancouver</td>
-<td>17930</td>
-<td>16</td>
-<td>36.112480</td>
-<td>36.112480</td>
-<td>2.257030</td>
+<td>161026</td>
+<td>91</td>
+<td>211.584819</td>
+<td>211.584819</td>
+<td>2.325108</td>
 </tr>
 <tr class="odd">
 <th data-quarto-table-cell-role="th">2</th>
 <td>on</td>
 <td>mississauga</td>
-<td>27104</td>
-<td>19</td>
-<td>57.984362</td>
-<td>57.984362</td>
-<td>3.051809</td>
+<td>215521</td>
+<td>183</td>
+<td>294.000052</td>
+<td>294.000052</td>
+<td>1.606558</td>
 </tr>
 <tr class="even">
 <th data-quarto-table-cell-role="th">3</th>
 <td>on</td>
 <td>ottawa</td>
-<td>22755</td>
-<td>20</td>
-<td>52.076566</td>
-<td>52.076566</td>
-<td>2.603828</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">4</th>
-<td>ab</td>
-<td>calgary</td>
-<td>85355</td>
-<td>64</td>
-<td>111.867019</td>
-<td>111.867019</td>
-<td>1.747922</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">5</th>
-<td>bc</td>
-<td>vancouver</td>
-<td>33618</td>
-<td>23</td>
-<td>45.042891</td>
-<td>45.042891</td>
-<td>1.958387</td>
-</tr>
-<tr class="odd">
-<th data-quarto-table-cell-role="th">6</th>
-<td>on</td>
-<td>mississauga</td>
-<td>40817</td>
-<td>35</td>
-<td>56.275055</td>
-<td>56.275055</td>
-<td>1.607859</td>
-</tr>
-<tr class="even">
-<th data-quarto-table-cell-role="th">7</th>
-<td>on</td>
-<td>ottawa</td>
-<td>30889</td>
-<td>21</td>
-<td>42.298061</td>
-<td>42.298061</td>
-<td>2.014193</td>
+<td>154786</td>
+<td>132</td>
+<td>217.242233</td>
+<td>217.242233</td>
+<td>1.645774</td>
 </tr>
 </tbody>
 </table>
