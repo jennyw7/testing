@@ -1,5 +1,3 @@
-
-
 SELECT  DISTINCT
         campaigns.id AS Campaign_ID,
         campaigns.goal,
